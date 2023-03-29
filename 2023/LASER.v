@@ -1,28 +1,38 @@
-// tmp_max_cover
 always @(posedge CLK)
 begin
     if(RST)
-        tmp_max_cover <= 6'd0;
-    else if(current_state == CAL_COVER_RATE ||current_state == CAL_UP || current_state == CAL_DOWN || current_state == CAL_LEFT || current_state == CAL_RIGHT)
     begin
-        if(counter >1)
+        dir1 <= 0;
+        dir2 <= 0;
+    end
+    else if(counter == 6'd40 && tmp_max_cover >max_cover)
+    begin
+        if(circle)
         begin
-            if(mul1 <=16 || mul2 <= 16)
-                tmp_max_cover <= max_cover + 1;
+            case(current_state)
+                CAL_UP:
+                    dir2 <= 1;
+                CAL_DOWN:
+                    dir2 <= 2;
+                CAL_LEFT:
+                    dir2 <= 3;
+                CAL_RIGHT:
+                    dir2 <= 4;
+            endcase
+        end
+        else
+        begin
+            case(current_state)
+                CAL_UP:
+                    dir1 <= 1;
+                CAL_DOWN:
+                    dir1 <= 2;
+                CAL_LEFT:
+                    dir1 <= 3;
+                CAL_RIGHT:
+                    dir1 <= 4;
+            endcase
         end
     end
-end
-// max_cover
-always @(posedge CLK)
-begin
-    if(RST)
-        tmp_max_cover <= 6'd0;
-    else if(current_state == CAL_UP || current_state == CAL_DOWN || current_state == CAL_LEFT || current_state == CAL_RIGHT)
-    begin
-        if(counter == 6'd40)
-        begin
-            if(tmp_max_cover >max_cover)
-                max_cover <= tmp_max_cover;
-        end
-    end
+
 end
