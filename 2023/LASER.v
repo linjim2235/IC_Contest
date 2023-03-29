@@ -1,3 +1,4 @@
+
 always @(posedge CLK)
 begin
     if(RST)
@@ -5,7 +6,7 @@ begin
         dir1 <= 0;
         dir2 <= 0;
     end
-    else if(counter == 6'd40 && tmp_max_cover >max_cover)
+    else if(counter == 6'd40 && tmp_max_cover > max_cover)
     begin
         if(circle)
         begin
@@ -33,6 +34,13 @@ begin
                     dir1 <= 4;
             endcase
         end
+    end
+    else if(counter == 6'd40 && tmp_max_cover < max_cover &&current_state == CAL_RIGHT)
+    begin
+        if(circle)
+            dir2 <= 0;
+        else
+            dir1 <= 0;
     end
 
 end
