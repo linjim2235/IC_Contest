@@ -1,12 +1,12 @@
 
 FTP account:                       Exxxxx
 
-Level:                             A/B/C
-cycle:                             40000
-Synthesis area:                    30000
+Level:                             A
+cycle:                             18816
+Synthesis area:                    24950.082593
 
 --- RTL category---
-HDL simulator :                    xrun/vcs/vsim/... 
+HDL simulator :                    ncverilog 
 RTL filename :                     LASER.v            
 
 --- Pre-layout gate-level ---
