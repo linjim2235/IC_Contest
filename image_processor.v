@@ -80,18 +80,18 @@ begin
         end
         CENTER_POSITION_READ:
         begin
-            if(center%300==9'd0 || center%300==9'd299)
-            begin
-                nxt_state=CENTER_POSITION_ADD;
-            end
-            else
-            begin
-                nxt_state=GC_SAVE;
-            end
+            nxt_state=GC_SAVE;
         end
         GC_SAVE:
         begin
-            nxt_state=LBP_POSITION_READ;
+            if(center[8:0] == 9'd400 || center[8:0] == 9'd399)//////////////////////////////////////////////
+            begin
+                nxt_state=Process;
+            end
+            else
+            begin
+                nxt_state=LBP_POSITION_READ;
+            end
         end
         LBP_POSITION_READ:
         begin
@@ -118,7 +118,7 @@ begin
         end
         CENTER_POSITION_ADD:
         begin
-            if (o_addr == DATA_LENGTH-1)
+            if (o_addr == DATA_LENGTH-401)
                 nxt_state = Finish;
             else
                 nxt_state=CENTER_POSITION_READ;
@@ -150,7 +150,7 @@ begin
         all_ready <= 0;
 
         data_out <= 0;
-        center <= 0;
+        center <= 401;
         counter<=3'd0;
         gc<=12'd0;
         pel_out <= 0;
@@ -176,15 +176,15 @@ begin
                 case(counter)
                     3'd0:	//g0
                     begin
-                        w_addr <= center-301;
+                        w_addr <= center-401;
                     end
                     3'd1:	//g1
                     begin
-                        w_addr <= center-300;
+                        w_addr <= center-400;
                     end
                     3'd2:	//g2
                     begin
-                        w_addr <= center-299;
+                        w_addr <= center-399;
                     end
                     3'd3:	//g3
                     begin
@@ -196,15 +196,15 @@ begin
                     end
                     3'd5:	//g5
                     begin
-                        w_addr <= center+299;
+                        w_addr <= center+399;
                     end
                     3'd6:	//g6
                     begin
-                        w_addr <= center+300;
+                        w_addr <= center+400;
                     end
                     3'd7:	//g7
                     begin
-                        w_addr <= center+301;
+                        w_addr <= center+401;
                     end
                 endcase
             end
@@ -273,19 +273,19 @@ begin
             Process:
             begin
                 case(cmd)
-                    0:
+                    0://lbp
                     begin
                         pel_out[11:8] <= pel_out[3:0];
                         pel_out[7:4] <= pel_out[3:0];
                         pel_out[3:0] <= pel_out[3:0];
                     end
-                    1:
+                    1://all white
                     begin
                         pel_out[11:8] <= 15;
                         pel_out[7:4] <= 15;
                         pel_out[3:0] <= 15;
                     end
-                    2:
+                    2:// original
                     begin
                         pel_out[11:8] <= data_out[3:0];
                         pel_out[7:4] <= data_out[3:0];
